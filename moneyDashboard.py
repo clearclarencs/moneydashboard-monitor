@@ -68,7 +68,7 @@ class moneyDashboard:
 
             transaction.update({"account_alias": user_accounts[transaction["accountId"]]})
 
-            key = ({transaction['description']}, dateutil.parser.isoparse(transaction["created"]).strftime("%d/%m/%y"))
+            key = (transaction['description'], dateutil.parser.isoparse(transaction["created"]).strftime("%d/%m/%y"))
 
             try:
                 grouped_transactions[key].append(transaction)

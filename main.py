@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands 
 
 from settingsManager import config
-from discordButtons import Buttons
+from discordButtons import Buttons, ButtonsWithSplit
 from googleSheet import googleSheet
 from moneyDashboard import moneyDashboard
 
@@ -16,7 +16,7 @@ class moneyDashboardMonitor:
         self.googleSheet = googleSheet()
         self.moneyDashboard = moneyDashboard()
 
-    async def _daemon(self, hour=9):
+    async def _daemon(self, hour=22):
         while True:
             if int(datetime.datetime.utcnow().strftime("%H")) == hour:
                 self.googleSheet.get_sheet()
@@ -85,8 +85,13 @@ class moneyDashboardMonitor:
             embed.title = f"{len(transaction['transactions'])} transaction(s) totaling: £{sum(transaction['amounts'])}"
             embed.description = f"From account(s): {transaction['accounts']}"
             embed.set_footer(text=transaction['date'])
+
+            if len(transaction['transactions']) > 1:
+                btn = ButtonsWithSplit
+            else:
+                btn = Buttons
             
-            await user.dm_channel.send(embed=embed, view=Buttons(self, self.googleSheet, transaction, embed))
+            await user.dm_channel.send(embed=embed, view=btn(self, self.googleSheet, transaction, embed))
 
             await asyncio.sleep(2)
 

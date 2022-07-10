@@ -41,7 +41,6 @@ class config:
                 with open("transactions.json", "w") as w:
                     w.write(json.dumps(sorted_transaction_ids))
                 old_transactions = sorted_transaction_ids[:]
-                print("Backed up transaction ID's")
 
             time.sleep(120)
 

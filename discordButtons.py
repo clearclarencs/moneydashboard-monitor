@@ -45,6 +45,7 @@ class Buttons(discord.ui.View):
         self.googleSheet.add_transactions([self.transaction_group])
 
 
+class ButtonsWithSplit(Buttons):
     @discord.ui.button(label="Split", style=discord.ButtonStyle.grey)
     async def split_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         self.embed.color = 16705372
