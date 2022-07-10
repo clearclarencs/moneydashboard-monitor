@@ -1,7 +1,6 @@
 import datetime, asyncio
 import discord
 from discord.ext import commands 
-import dateutil.parser
 
 from settingsManager import config
 from discordButtons import Buttons
@@ -38,7 +37,7 @@ class moneyDashboardMonitor:
         unsure_transactions = [] 
         other_income_transactions = []
 
-        for description, transactions in groups.items():
+        for (description, day), transactions in groups.items():
             if description not in settings["businessBlacklist"]:
                 amounts = []
                 accounts = {}
@@ -53,7 +52,7 @@ class moneyDashboardMonitor:
                         "description": description,
                         "amounts": amounts,
                         "accounts": accounts,
-                        "date": dateutil.parser.isoparse(transactions[0]["created"]).strftime("%d/%m/%y"),
+                        "date": day,
                         "transactions": transactions
                     }
 

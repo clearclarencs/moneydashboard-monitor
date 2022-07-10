@@ -1,5 +1,6 @@
 from settingsManager import config, sorted_transaction_ids
 from pycognito.aws_srp import AWSSRP
+import dateutil.parser
 import boto3
 import datetime
 import requests
@@ -67,10 +68,12 @@ class moneyDashboard:
 
             transaction.update({"account_alias": user_accounts[transaction["accountId"]]})
 
+            key = ({transaction['description']}, dateutil.parser.isoparse(transaction["created"]).strftime("%d/%m/%y"))
+
             try:
-                grouped_transactions[transaction["description"]].append(transaction)
+                grouped_transactions[key].append(transaction)
             except KeyError:
-                grouped_transactions[transaction["description"]] = [transaction]
+                grouped_transactions[key] = [transaction]
 
             sorted_transaction_ids.append(transaction["id"])
         
