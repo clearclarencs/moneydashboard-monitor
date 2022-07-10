@@ -17,7 +17,7 @@ class moneyDashboardMonitor:
         self.googleSheet = googleSheet()
         self.moneyDashboard = moneyDashboard()
 
-    async def _daemon(self, hour=20):
+    async def _daemon(self, hour=9):
         while True:
             if int(datetime.datetime.utcnow().strftime("%H")) == hour:
                 self.googleSheet.get_sheet()
