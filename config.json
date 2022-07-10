@@ -1,0 +1,11 @@
+{
+    "botToken": "",
+    "discordId": "",
+    "mdEmail": "",
+    "mdPassword": "",
+    "googleSpreadsheet": "",
+    "businessWhitelist": [],
+    "businessBlacklist": [],
+    "otherIncomes": {}
+
+}
