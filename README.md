@@ -7,7 +7,7 @@ The unknown transactions will then be dmed to you on discord to select whether t
 Business transactions will be added to a google sheets spreadsheet.
 
 # Setup
-1) pip install -r requirements.txt (reccommend running in a venv)
+1) `pip install -r requirements.txt` (recommend running in a venv)
 2) Create and download a gcloud key as [shown here](http://gspread.readthedocs.org/en/latest/oauth2.html)
 3) Fill config.json as described below:
 
