@@ -29,7 +29,7 @@ class googleSheet:
             self.sheet.update(cell, value, value_input_option="USER_ENTERED")
     
     def add_transactions(self, transactions):
-        row = len(self.sheet.col_values(1))
+        row = len(self.sheet.col_values(1)) + 1
 
         values = []
 
