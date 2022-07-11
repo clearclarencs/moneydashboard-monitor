@@ -34,7 +34,6 @@ class googleSheet:
         values = []
 
         for transaction in transactions:
-            row += 1  # Iterate down
             values.append([
                 transaction["description"],
                 f"=SUM({', '.join([str(x) for x in transaction['amounts']])})",
