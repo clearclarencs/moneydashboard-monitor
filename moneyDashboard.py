@@ -77,4 +77,6 @@ class moneyDashboard:
 
             sorted_transaction_ids.append(transaction["id"])
         
+        sorted_transaction_ids = [x["id"] for x in r.json()]
+        
         return grouped_transactions
