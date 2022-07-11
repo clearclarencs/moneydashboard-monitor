@@ -9,7 +9,7 @@ from moneyDashboard import moneyDashboard
 
 running = False
 
-client = commands.Bot(command_prefix="PlzNoPing", intents=discord.Intents.default())
+client = commands.Bot(command_prefix="!", intents=discord.Intents.default())
 
 class moneyDashboardMonitor:
     def __init__(self):
@@ -102,6 +102,10 @@ async def on_ready():
         running = True
         x = moneyDashboardMonitor()
         await x._daemon()
+
+@client.event
+async def on_command_error(ctx, error):
+    pass
 
 if __name__ == "__main__":
     client.run(config.get_config()["botToken"])

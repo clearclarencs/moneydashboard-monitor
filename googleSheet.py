@@ -43,7 +43,7 @@ class googleSheet:
 
 
         self.sheet.update(
-            f'A{row}:D{row+len(transactions)-1}',
+            f'A{row}:D{row+len(values)-1}',
             values,
             value_input_option="USER_ENTERED"
         )
