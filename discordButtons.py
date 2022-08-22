@@ -14,31 +14,35 @@ class Buttons(discord.ui.View):
 
     @discord.ui.button(label="Business", style=discord.ButtonStyle.blurple)
     async def business_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        self.embed.color = 368603
-        self.embed.set_author(name=f"Business - {self.transaction_group['description']}")
-        await interaction.response.edit_message(embed=self.embed, view=None)
+        emb = interaction.message.embeds[0]
+        emb.color = 368603
+        emb.set_author(name=f"Business - {self.transaction_group['description']}")
+        await interaction.response.edit_message(embed=emb, view=None)
 
         self.googleSheet.add_transactions([self.transaction_group])
 
     @discord.ui.button(label="Personal", style=discord.ButtonStyle.grey)
     async def personal_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        self.embed.color = 10070709
-        self.embed.set_author(name=f"Personal - {self.transaction_group['description']}")
-        await interaction.response.edit_message(embed=self.embed, view=None)
+        emb = interaction.message.embeds[0]
+        emb.color = 10070709
+        emb.set_author(name=f"Personal - {self.transaction_group['description']}")
+        await interaction.response.edit_message(embed=emb, view=None)
 
     @discord.ui.button(label="Blacklist", style=discord.ButtonStyle.red)
     async def blacklist_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        self.embed.color = 15548997
-        self.embed.set_author(name=f"Blacklist - {self.transaction_group['description']}")
-        await interaction.response.edit_message(embed=self.embed, view=None)
+        emb = interaction.message.embeds[0]
+        emb.color = 15548997
+        emb.set_author(name=f"Blacklist - {self.transaction_group['description']}")
+        await interaction.response.edit_message(embed=emb, view=None)
 
         config.add_to_list(self.transaction_group['description'])
 
     @discord.ui.button(label="Whitelist", style=discord.ButtonStyle.green)
     async def whitelist_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        self.embed.color = 5763719
-        self.embed.set_author(name=f"Whitelist - {self.transaction_group['description']}")
-        await interaction.response.edit_message(embed=self.embed, view=None)
+        emb = interaction.message.embeds[0]
+        emb.color = 5763719
+        emb.set_author(name=f"Whitelist - {self.transaction_group['description']}")
+        await interaction.response.edit_message(embed=emb, view=None)
 
         config.add_to_list(self.transaction_group['description'], blacklist=False)
 
@@ -48,9 +52,10 @@ class Buttons(discord.ui.View):
 class ButtonsWithSplit(Buttons):
     @discord.ui.button(label="Split", style=discord.ButtonStyle.grey)
     async def split_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        self.embed.color = 16705372
-        self.embed.set_author(name=f"Split - {self.transaction_group['description']}")
-        await interaction.response.edit_message(embed=self.embed, view=None)
+        emb = interaction.message.embeds[0]
+        emb.color = 16705372
+        emb.set_author(name=f"Split - {self.transaction_group['description']}")
+        await interaction.response.edit_message(embed=emb, view=None)
 
         new_transactions = []
         for transaction in self.transaction_group["transactions"]:
