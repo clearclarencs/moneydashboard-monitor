@@ -4,6 +4,11 @@ import dateutil.parser
 import boto3
 import datetime
 import requests
+import botocore
+
+session_config = botocore.config.Config(
+  user_agent="aws-amplify/0.1.x js"
+)
 
 class moneyDashboard:
     def __init__(self):
@@ -28,7 +33,7 @@ class moneyDashboard:
     def login(self):  # Token lasts 1 hour
         settings = config.get_config()
 
-        client = boto3.client('cognito-idp', region_name="eu-west-2")
+        client = boto3.client('cognito-idp', region_name="eu-west-2", config=session_config)
         
         aws = AWSSRP(username=settings["mdEmail"], password=settings["mdPassword"], pool_id="eu-west-2_oXtK9cXqF",
                     client_id='vj841jhgqv528ogqu71397g4', client=client)
