@@ -7,8 +7,13 @@ import requests
 import botocore
 
 session_config = botocore.config.Config(
-  user_agent="aws-amplify/0.1.x js"
+  user_agent="aws-amplify/0.1.x js",
 )
+
+settings = config.get_config()
+
+if settings.get("proxy"):
+    session_config.proxies = {'https': settings["proxy"]}
 
 class moneyDashboard:
     def __init__(self):
