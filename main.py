@@ -1,11 +1,12 @@
 import datetime, asyncio
-import discord
+import discord, os
 from discord.ext import commands 
 
 from settingsManager import config
 from discordButtons import Buttons, ButtonsWithSplit
 from googleSheet import googleSheet
 from moneyDashboard import moneyDashboard
+from tabula import read_pdf
 
 running = False
 
@@ -27,11 +28,12 @@ class moneyDashboardMonitor:
             else:
                 await asyncio.sleep(3000)
     
-    async def process_transactions(self):
+    async def process_transactions(self, groups=None):
         settings = config.get_config()
 
-        self.moneyDashboard.login()
-        groups = self.moneyDashboard.get_transactions()
+        if not groups:
+            self.moneyDashboard.login()
+            groups = self.moneyDashboard.get_transactions()
 
         good_transactions = []
         unsure_transactions = [] 
@@ -102,6 +104,22 @@ async def on_ready():
         running = True
         x = moneyDashboardMonitor()
         await x._daemon()
+
+@client.event
+async def on_message(message):
+    if isinstance(message.channel, discord.channel.DMChannel) and message.attachments and message.attachments[0].filename.endswith(".pdf"):
+        await message.attachments[0].save("temp.pdf")
+        try:
+            df_list = read_pdf("temp.pdf", stream=True, guess=True, pages='all',
+                                multiple_tables=True,
+                                pandas_options={'header':None}
+                                )
+        except: pass
+            
+        os.remove("temp.pdf")
+        
+        final_transactions = []
+
 
 @client.event
 async def on_command_error(ctx, error):
