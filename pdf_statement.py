@@ -1,6 +1,8 @@
-from tabula import read_pdf
 import os
+
+from tabula import read_pdf
 from datetime import datetime
+from glob import glob
 
 class pdfReader:
     def addTransactions(self, groups):
@@ -19,10 +21,15 @@ class pdfReader:
 
     def read(self):
         try:
-            self.raw = "\n".join([str(x) for x in read_pdf("temp.pdf", stream=True, guess=True, pages='all',
-                                multiple_tables=True,
-                                pandas_options={'header':None}
-                                )])
+            self.raw = []
+
+            for filename in glob("*.pdf"):
+                self.raw += [str(x) for x in read_pdf(filename, stream=True, guess=True, pages='all',
+                                    multiple_tables=True,
+                                    pandas_options={'header':None}
+                                    )]
+            
+            self.raw = "\n".join(self.raw)
         except Exception:
             self.raw = []
     
