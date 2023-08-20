@@ -29,12 +29,11 @@ class moneyDashboardMonitor:
             else:
                 await asyncio.sleep(3000)
     
-    async def process_transactions(self, groups=None):
+    async def process_transactions(self):
         settings = config.get_config()
 
-        if not groups:
-            self.moneyDashboard.login()
-            groups = self.moneyDashboard.get_transactions()
+        self.moneyDashboard.login()
+        groups = self.moneyDashboard.get_transactions()
         
         groups = self.pdfReader.addTransactions(groups)
 
