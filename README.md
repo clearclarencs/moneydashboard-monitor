@@ -6,6 +6,8 @@ The unknown transactions will then be dmed to you on discord to select whether t
 
 Business transactions will be added to a google sheets spreadsheet.
 
+For Chase transactions DM the pdf statement to the bot every month, the transactions will then be processed the following day.
+
 # Setup
 1) `pip install -r requirements.txt` (recommend running in a venv)
 2) Create and download a gcloud key as [shown here](http://gspread.readthedocs.org/en/latest/oauth2.html)
@@ -36,3 +38,7 @@ Business transactions will be added to a google sheets spreadsheet.
 4) Run main.py
 
 First run will read the previous 30 days of transactions.
+
+
+
+This program uses floats to represent transaction amounts, while this is bad practice and can cause discrepancies, it is negligible for this application.

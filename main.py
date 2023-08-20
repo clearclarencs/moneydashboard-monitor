@@ -1,11 +1,12 @@
 import datetime, asyncio
-import discord
+import discord, os
 from discord.ext import commands 
 
 from settingsManager import config
 from discordButtons import Buttons, ButtonsWithSplit
 from googleSheet import googleSheet
 from moneyDashboard import moneyDashboard
+from pdf_statement import pdfReader
 
 running = False
 
@@ -15,6 +16,7 @@ class moneyDashboardMonitor:
     def __init__(self):
         self.googleSheet = googleSheet()
         self.moneyDashboard = moneyDashboard()
+        self.pdfReader = pdfReader()
 
     async def _daemon(self, hour=6):
         while True:
@@ -32,6 +34,8 @@ class moneyDashboardMonitor:
 
         self.moneyDashboard.login()
         groups = self.moneyDashboard.get_transactions()
+        
+        groups = self.pdfReader.addTransactions(groups)
 
         good_transactions = []
         unsure_transactions = [] 
@@ -102,6 +106,12 @@ async def on_ready():
         running = True
         x = moneyDashboardMonitor()
         await x._daemon()
+
+@client.event
+async def on_message(message):
+    if isinstance(message.channel, discord.channel.DMChannel) and message.attachments and message.attachments[0].filename.endswith(".pdf"):
+        await message.attachments[0].save("temp.pdf")
+
 
 @client.event
 async def on_command_error(ctx, error):
