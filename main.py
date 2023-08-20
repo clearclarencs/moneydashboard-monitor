@@ -1,5 +1,5 @@
 import datetime, asyncio
-import discord, os
+import discord, random
 from discord.ext import commands 
 
 from settingsManager import config
@@ -110,7 +110,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if isinstance(message.channel, discord.channel.DMChannel) and message.attachments and message.attachments[0].filename.endswith(".pdf"):
-        await message.attachments[0].save("temp.pdf")
+        await message.attachments[0].save(f"temp{random.randint(1,999999)}.pdf")
 
 
 @client.event
