@@ -14,7 +14,8 @@ class pdfReader:
         self.read()
         self.add()
 
-        os.remove("temp.pdf")
+        for filename in glob("*.pdf"):
+            os.remove(filename)
 
         return self.groups
 
