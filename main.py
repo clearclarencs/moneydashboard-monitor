@@ -6,7 +6,7 @@ from settingsManager import config
 from discordButtons import Buttons, ButtonsWithSplit
 from googleSheet import googleSheet
 from moneyDashboard import moneyDashboard
-from tabula import read_pdf
+from pdf_statement import pdfReader
 
 running = False
 
@@ -16,6 +16,7 @@ class moneyDashboardMonitor:
     def __init__(self):
         self.googleSheet = googleSheet()
         self.moneyDashboard = moneyDashboard()
+        self.pdfReader = pdfReader()
 
     async def _daemon(self, hour=6):
         while True:
@@ -34,6 +35,8 @@ class moneyDashboardMonitor:
         if not groups:
             self.moneyDashboard.login()
             groups = self.moneyDashboard.get_transactions()
+        
+        groups = self.pdfReader.addTransactions(groups)
 
         good_transactions = []
         unsure_transactions = [] 
@@ -109,16 +112,6 @@ async def on_ready():
 async def on_message(message):
     if isinstance(message.channel, discord.channel.DMChannel) and message.attachments and message.attachments[0].filename.endswith(".pdf"):
         await message.attachments[0].save("temp.pdf")
-        try:
-            df_list = read_pdf("temp.pdf", stream=True, guess=True, pages='all',
-                                multiple_tables=True,
-                                pandas_options={'header':None}
-                                )
-        except: pass
-            
-        os.remove("temp.pdf")
-        
-        final_transactions = []
 
 
 @client.event
