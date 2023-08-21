@@ -31,11 +31,12 @@ class pdfReader:
                                     )]
             
             self.raw = "\n".join(self.raw)
-        except Exception:
+        except Exception as e:
+            print(e)
             self.raw = []
     
     def check(self):
-        return os.path.exists("temp.pdf")
+        return bool(glob("*.pdf"))
     
     def add(self):
         for trans in self.raw.splitlines():
