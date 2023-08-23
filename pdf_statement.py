@@ -42,16 +42,16 @@ class pdfReader:
     def add(self):
         for trans in self.raw.splitlines():
             try:
-                components = trans.split()
-                day = int(components[1])
-                month = components[2]
-                year = int(components[3])
-                description = components[4]
-                income = bool("-" not in components[5])
-                amount = float(components[5].split("£")[1])
+                component1, component2, balance = [x.split() for x in trans.split("£")]
+                day = int(component1[1])
+                month = component1[2]
+                year = int(component1[3])
+                description = " ".join(component1[4:-1]).replace(" NaN", "")
+                income = bool("-" not in component2)
+                amount = float(component2[0])
                 formatted_date = datetime.strptime(f"{day}/{month}/{year}", "%d/%b/%Y").strftime("%d/%m/%y")
                 bank = "Chase"
-            except Exception:
+            except Exception as e:
                 continue
 
             transaction = {
