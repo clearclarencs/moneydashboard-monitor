@@ -25,8 +25,9 @@ class pdfReader:
             self.raw = []
 
             for filename in glob("*.pdf"):
-                self.raw += [str(x) for x in read_pdf(filename, stream=True, guess=True, pages='all',
+                self.raw += [str(x) for x in read_pdf(filename, stream=True, pages='all',
                                     multiple_tables=True,
+                                    guess=False,
                                     pandas_options={'header':None}
                                     )]
             
