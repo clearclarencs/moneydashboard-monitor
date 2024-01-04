@@ -1,5 +1,7 @@
 # moneydashboard-monitor
 
+Monedashboard is currently EOL, I might implement a new snoop app scraper when I get the chance. This is currently useless, however.
+
 A program to scrape your moneydashboard transactions daily.
 
 The unknown transactions will then be dmed to you on discord to select whether they are business transactions.
