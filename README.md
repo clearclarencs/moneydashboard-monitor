@@ -1,6 +1,8 @@
 # moneydashboard-monitor
 
 Monedashboard is currently EOL, I might implement a new snoop app scraper when I get the chance. This is currently useless, however.
+Snoop also has support for Chase though, meaning PDF statements aren't required anymore for me.
+I believe they have SSL pinning and the web dashboard requires app 2fa though so it is a bit of a hurdle (if feasible at all).
 
 A program to scrape your moneydashboard transactions daily.
 
