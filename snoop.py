@@ -40,59 +40,55 @@ class moneyDashboard:
                 "make":"G",
                 "model":"sdk_gphone_arm",
                 "osVersion":"20",
-                "platform":"Web",
-                "udid":"jhsdbld"
+                "platform":"Apple",
+                "udid":"vkuyvhjjhbiiug"
             },
             "pin":settings["snoopPin"]
         }
-        self.session.put("/customer/auth/verify")
+        resp = self.session.put("https://shared-services-api.snoop.app/customer/auth/verify", json=login_data).json()
 
-        
+        self.session.headers.update({"Authorization": f"Bearer {resp['accessToken']}"})
 
-        
+        if resp["isNewDevice"]: # Need to 2fa
+            self.session.post("https://shared-services-api.snoop.app/customer/auth/verify-device")
 
-        self.session.headers.update({"x-auth": tokens["AuthenticationResult"]["IdToken"]})
+            twoFA_data = {"code": input("Two factor code: ")}
+
+            resp = self.session.put("https://shared-services-api.snoop.app/customer/auth/verify-device", json=twoFA_data).json()
+            self.session.headers.update({"Authorization": f"Bearer {resp['accessToken']}"})
+
     
     def get_transactions(self):  # return {transaction_description: [transactions]}
         global sorted_transaction_ids
 
-        settings = config.get_config()
+        accounts = {x["id"]:x["displayName"] for x in self.session.get("https://shared-services-api.snoop.app/financial-account/accounts").json()}
 
-        user_accounts = self.session.get("https://neonapiprod.moneydashboard.com/v1/accounts").json()
-        try:
-            user_accounts = {x["accountId"]: x["alias"] for x in user_accounts}
-        except Exception:
-            raise RuntimeError(f"Error reading accounts, most likely login error: {user_accounts}")
-
-        today = datetime.datetime.utcnow()
-
-        data1 = {
-            "startDate": (today - datetime.timedelta(days=30)).strftime("%Y-%m-%d"),
-            "endDate": today.strftime("%Y-%m-%d")
-            }
-
-        if settings["accounts"] != ["all"]:
-            data1.update({"accounts": settings["accounts"]})
-        
-        r = self.session.post("https://neonapiprod.moneydashboard.com/v1/transactions/filter", json=data1)
+        r = self.session.get("https://shared-services-api.snoop.app/transaction/transactions?limit=100")
 
         grouped_transactions = {}
 
-        for transaction in r.json():
-            if transaction["amount"]["amount"] == 0 or transaction["id"] in sorted_transaction_ids:
+        for transaction in r.json()["transactions"]:
+            if transaction["amount"] == 0 or transaction["transactionId"] in sorted_transaction_ids:
                 continue
 
-            transaction.update({"account_alias": user_accounts[transaction["accountId"]]})
+            transaction.update({
+                "account_alias": accounts[transaction["accountId"]],
+                "type": ("Credit" if transaction["amount"] > 0 else "Transaction"),
+                "amount":{
+                    "amount": abs(transaction["amount"])
+                 },
+                "id": transaction["transactionId"]
+                })
 
-            key = (transaction['description'], dateutil.parser.isoparse(transaction["created"]).strftime("%d/%m/%y"))
+            key = (transaction['description'], dateutil.parser.isoparse(transaction["timestamp"]).strftime("%d/%m/%y"))
 
             try:
                 grouped_transactions[key].append(transaction)
             except KeyError:
                 grouped_transactions[key] = [transaction]
 
-            sorted_transaction_ids.append(transaction["id"])
+            sorted_transaction_ids.append(transaction["transactionId"])
         
-        sorted_transaction_ids = [x["id"] for x in r.json()]
+        sorted_transaction_ids = [x["transactionId"] for x in r.json()["transactions"]]
         
         return grouped_transactions
