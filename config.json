@@ -1,8 +1,8 @@
 {
     "botToken": "abc123",
     "discordId": 123,
-    "mdEmail": "foobar@foobar.com",
-    "mdPassword": "Password123",
+    "snoopCustomerID": "foobar@foobar.com",
+    "snoopPin": "Password123",
     "googleSpreadsheet": "https://docs.google.com/spreadsheets/d/.../edit#gid=0",
     "worksheetNumber": 0,
     "googleKeyPath": "key.json",
