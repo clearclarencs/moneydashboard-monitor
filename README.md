@@ -1,10 +1,10 @@
-# moneydashboard-monitor
+# snoop-monitor
 
-Monedashboard is currently EOL, I might implement a new snoop app scraper when I get the chance. This is currently useless, however.
-Snoop also has support for Chase though, meaning PDF statements aren't required anymore for me.
-I believe they have SSL pinning and the web dashboard requires app 2fa though so it is a bit of a hurdle (if feasible at all).
+This originally used moneydashboard which has since shut down, so now uses snoop app.
 
-A program to scrape your moneydashboard transactions daily.
+Thats why some stuff refers to moneydashbaord (Im currently too lazy to go and rename everything).
+
+A program to scrape your snoop transactions daily.
 
 The unknown transactions will then be dmed to you on discord to select whether they are business transactions.
 
@@ -21,9 +21,9 @@ For Chase transactions DM the pdf statement to the bot every month, the transact
     
     "discordId" - Your discord account id for the bot to dm you
     
-    "mdEmail" - Your money dashboard email
+    "snoopCustomerId" - Your customer ID for snoop (can be found in snoop settings)
     
-    "mdPassword" - Your money dashboard password
+    "snoopPin" - Your snoop pin code
     
     "googleSpreadsheet" - Link to your google sheets spreadsheet
     
@@ -42,6 +42,7 @@ For Chase transactions DM the pdf statement to the bot every month, the transact
 4) Run main.py
 
 First run will read the previous 30 days of transactions.
+You may also have to enter the 2fa code in the console on your first run (after that will never be required no matter the device/ip you run on).
 
 
 
