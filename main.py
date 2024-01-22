@@ -5,7 +5,7 @@ from discord.ext import commands
 from settingsManager import config
 from discordButtons import Buttons, ButtonsWithSplit
 from googleSheet import googleSheet
-from moneyDashboard import moneyDashboard
+from moneyDashboard import snoop
 from pdf_statement import pdfReader
 
 running = False
@@ -16,6 +16,7 @@ class moneyDashboardMonitor:
     def __init__(self):
         self.googleSheet = googleSheet()
         self.moneyDashboard = moneyDashboard()
+        self.moneyDashboard.login() # Login to trigger 2fa if required
         self.pdfReader = pdfReader()
 
     async def _daemon(self, hour=6):
