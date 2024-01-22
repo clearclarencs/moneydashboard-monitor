@@ -5,7 +5,7 @@ from discord.ext import commands
 from settingsManager import config
 from discordButtons import Buttons, ButtonsWithSplit
 from googleSheet import googleSheet
-from moneyDashboard import snoop
+from snoop import moneyDashboard
 from pdf_statement import pdfReader
 
 running = False
