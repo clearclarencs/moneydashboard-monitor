@@ -6,14 +6,7 @@ import datetime
 import requests
 import botocore
 
-session_config = botocore.config.Config(
-  user_agent="aws-amplify/0.1.x js",
-)
-
 settings = config.get_config()
-
-if settings.get("proxy"):
-    session_config.proxies = {'https': settings["proxy"]}
 
 class moneyDashboard:
     def __init__(self):
@@ -27,6 +20,9 @@ class moneyDashboard:
             "content-type": "application/json; charset=UTF-8",
             "user-agent": "okhttp/4.9.3"
         })
+
+        if settings.get("proxy"):
+            self.session.proxies = {"https":f"http://{settings['proxy']}"}
 
     def login(self):  # Token lasts 1 hour
         settings = config.get_config()
