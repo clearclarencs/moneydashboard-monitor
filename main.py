@@ -91,7 +91,7 @@ class moneyDashboardMonitor:
         for transaction in transactions:
             embed.set_author(name=transaction["description"])
             embed.title = f"{len(transaction['transactions'])} transaction(s) totaling: £{sum(transaction['amounts'])}"
-            embed.description = f"From account(s): {transaction['accounts']}\n{transaction['ids']}"
+            embed.description = f"From account(s): {transaction['accounts']}"
             embed.set_footer(text=transaction['date'])
 
             if len(transaction['transactions']) > 1:
