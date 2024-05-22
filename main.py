@@ -16,10 +16,10 @@ class moneyDashboardMonitor:
     def __init__(self):
         self.googleSheet = googleSheet()
         self.moneyDashboard = moneyDashboard()
-        self.moneyDashboard.login() # Login to trigger 2fa if required
+        self.moneyDashboard.login() # Do an intialisation login incase of 2fa
         self.pdfReader = pdfReader()
 
-    async def _daemon(self, hour=6):
+    async def _daemon(self, hour=3):
         while True:
             if int(datetime.datetime.utcnow().strftime("%H")) == hour:
                 self.googleSheet.get_sheet()
@@ -46,17 +46,20 @@ class moneyDashboardMonitor:
             if description not in settings["businessBlacklist"]:
                 amounts = []
                 accounts = {}
+                ids = ""
                 for i, transaction in enumerate(transactions):
                     amount = transaction["amount"]["amount"] if transaction["type"] == "Credit" else -transaction["amount"]["amount"]
                     amounts.append(amount)
                     accounts[transaction["account_alias"]] = ""
                     transactions[i]["amount"] = amount
+                    ids += transaction["id"]+","
                 accounts = ", ".join(list(accounts))
 
                 group = {
                         "description": description,
                         "amounts": amounts,
                         "accounts": accounts,
+                        "ids": ids,
                         "date": day,
                         "transactions": transactions
                     }
