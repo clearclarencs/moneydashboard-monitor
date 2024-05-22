@@ -52,6 +52,7 @@ class moneyDashboard:
 
             resp = self.session.put("https://shared-services-api.snoop.app/customer/auth/verify-device", json=twoFA_data).json()
             self.session.headers.update({"Authorization": f"Bearer {resp['accessToken']}"})
+        print("Logged in")
 
     
     def get_transactions(self):  # return {transaction_description: [transactions]}
@@ -64,7 +65,7 @@ class moneyDashboard:
         grouped_transactions = {}
 
         for transaction in r.json()["transactions"]:
-            if transaction["amount"] == 0 or transaction["transactionId"] in sorted_transaction_ids:
+            if transaction["amount"] == 0 or transaction["transactionId"] in sorted_transaction_ids or transaction["status"] == "Pending":
                 continue
 
             transaction.update({
@@ -85,6 +86,5 @@ class moneyDashboard:
 
             sorted_transaction_ids.append(transaction["transactionId"])
         
-        sorted_transaction_ids = [x["transactionId"] for x in r.json()["transactions"]]
         
         return grouped_transactions

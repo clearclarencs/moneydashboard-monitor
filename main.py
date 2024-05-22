@@ -19,7 +19,7 @@ class moneyDashboardMonitor:
         self.moneyDashboard.login() # Do an intialisation login incase of 2fa
         self.pdfReader = pdfReader()
 
-    async def _daemon(self, hour=6):
+    async def _daemon(self, hour=3):
         while True:
             if int(datetime.datetime.utcnow().strftime("%H")) == hour:
                 self.googleSheet.get_sheet()
@@ -46,17 +46,20 @@ class moneyDashboardMonitor:
             if description not in settings["businessBlacklist"]:
                 amounts = []
                 accounts = {}
+                ids = ""
                 for i, transaction in enumerate(transactions):
                     amount = transaction["amount"]["amount"] if transaction["type"] == "Credit" else -transaction["amount"]["amount"]
                     amounts.append(amount)
                     accounts[transaction["account_alias"]] = ""
                     transactions[i]["amount"] = amount
+                    ids += transaction["id"]+","
                 accounts = ", ".join(list(accounts))
 
                 group = {
                         "description": description,
                         "amounts": amounts,
                         "accounts": accounts,
+                        "ids": ids,
                         "date": day,
                         "transactions": transactions
                     }
@@ -88,7 +91,7 @@ class moneyDashboardMonitor:
         for transaction in transactions:
             embed.set_author(name=transaction["description"])
             embed.title = f"{len(transaction['transactions'])} transaction(s) totaling: £{sum(transaction['amounts'])}"
-            embed.description = f"From account(s): {transaction['accounts']}"
+            embed.description = f"From account(s): {transaction['accounts']}\n{transaction['ids']}"
             embed.set_footer(text=transaction['date'])
 
             if len(transaction['transactions']) > 1:
