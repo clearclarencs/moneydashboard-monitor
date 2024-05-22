@@ -74,7 +74,7 @@ class moneyDashboard:
                 "amount":{
                     "amount": abs(transaction["amount"])
                  },
-                "id": transaction["transactionId"]
+                "id": transaction["providerTransactionId"]
                 })
 
             key = (transaction['description'], dateutil.parser.isoparse(transaction["timestamp"]).strftime("%d/%m/%y"))
