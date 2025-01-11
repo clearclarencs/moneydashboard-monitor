@@ -14,7 +14,7 @@ class moneyDashboard:
 
         self.session.headers.update({
             "X-Api-Key": "Yk3HYHf7oD1R4j7aJYMp8CG2ruiDSZk4hbV10Vj3",
-            "X-Snoop-Version": "7.1.1",
+            "X-Snoop-Version": "8.8.0",
             "accept": "application/json",
             "accept-encoding": "gzip, deflate, br",
             "content-type": "application/json; charset=UTF-8",
@@ -41,11 +41,16 @@ class moneyDashboard:
             },
             "pin":settings["snoopPin"]
         }
-        resp = self.session.put("https://shared-services-api.snoop.app/customer/auth/verify", json=login_data).json()
+        resp = self.session.put("https://shared-services-api.snoop.app/customer/auth/verify", json=login_data)
 
-        self.session.headers.update({"Authorization": f"Bearer {resp['accessToken']}"})
+        try:
+            jason = resp.json()
+        except Exception as e:
+            print(f"Error decoding login response {e} {resp.status_code} {resp.text}")
 
-        if resp["isNewDevice"]: # Need to 2fa
+        self.session.headers.update({"Authorization": f"Bearer {jason['accessToken']}"})
+
+        if jason["isNewDevice"]: # Need to 2fa
             self.session.post("https://shared-services-api.snoop.app/customer/auth/verify-device")
 
             twoFA_data = {"code": input("Two factor code: ")}
